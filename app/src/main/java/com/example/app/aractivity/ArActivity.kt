@@ -66,10 +66,15 @@ class ArActivity : AppCompatActivity() {
     @SuppressLint("ClickableViewAccessibility")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        // view binding
         binding = ExampleActivityBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        // Sets whether the decor view should fit root-level content views
         WindowCompat.setDecorFitsSystemWindows(window, false)
 
+        // Full Screen
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
             findViewById<View>(android.R.id.content)!!.windowInsetsController!!
                 .also { windowInsetsController ->
@@ -179,8 +184,7 @@ class ArActivity : AppCompatActivity() {
                 Pair(
                     binding.surfaceView.toViewRect(),
                     TouchEvent.Stop(motionEvent.x, motionEvent.y),
-                )
-                    .let { dragEvents.tryEmit(it) }
+                ).let { dragEvents.tryEmit(it) }
             }
 
             transformationSystem.onTouch(motionEvent)
@@ -189,6 +193,7 @@ class ArActivity : AppCompatActivity() {
 
         createScope.launch {
             try {
+                // create Ar Scene
                 createUx()
             } catch (error: Throwable) {
                 if (error !is UserCanceled) {
@@ -211,6 +216,7 @@ class ArActivity : AppCompatActivity() {
 
         startScope.launch {
             try {
+                // start Ar Scene
                 startUx()
             } catch (error: Throwable) {
                 if (error !is UserCanceled) {
